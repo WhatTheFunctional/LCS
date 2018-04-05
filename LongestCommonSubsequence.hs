@@ -44,7 +44,10 @@ lcsMatrix i j a b m = let (thisDir, thisValue) = Data.Matrix.getElem (i + 1) (j 
                       in updateMatrix thisDir i j a b m
 
 traceMatrix :: Int -> Int -> Data.Array.Array Int Char -> Data.Array.Array Int Char -> Data.Matrix.Matrix (Direction, Int) -> [Char] -> [Char]
-traceMatrix 1 1 a b _ longestCommonSubsequence = if a ! 0 == b ! 0
+traceMatrix i 1 a b _ longestCommonSubsequence = if a ! (i - 1) == b ! 0
+                                                 then a ! (i - 1) : longestCommonSubsequence
+                                                 else longestCommonSubsequence
+traceMatrix 1 j a b _ longestCommonSubsequence = if a ! 0 == b ! (j - 1)
                                                  then a ! 0 : longestCommonSubsequence
                                                  else longestCommonSubsequence
 traceMatrix i j a b m longestCommonSubsequence = let (direction, _) = Data.Matrix.getElem (i + 1) (j + 1) m
