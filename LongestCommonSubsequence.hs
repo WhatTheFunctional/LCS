@@ -9,17 +9,9 @@ import qualified Data.Matrix
 
 data Direction = NoDir | LeftDir | UpDir | DiagonalDir deriving (Show, Eq)
 
---Note that Matrix is 1-indexed
-matrixGenerator :: (Int, Int) -> (Direction, Int)
-matrixGenerator (i, j)
-    | i == 1 && j == 1 = (NoDir, 0) 
-    | i == 1 = (NoDir, 0)
-    | j == 1 = (NoDir, 0)
-    | otherwise = (NoDir, 0)
-
 --Function to initialize matrix
 initMatrix :: Int -> Int -> Data.Matrix.Matrix (Direction, Int)
-initMatrix a b = Data.Matrix.matrix a b matrixGenerator
+initMatrix a b = Data.Matrix.matrix a b (\(i, j) -> (NoDir, 0))
 
 updateMatrix :: Direction -> Int -> Int -> Data.Array.Array Int Char -> Data.Array.Array Int Char -> Data.Matrix.Matrix (Direction, Int) -> Data.Matrix.Matrix (Direction, Int)
 updateMatrix NoDir i j a b m = if (a ! (i - 1)) == (b ! (j - 1))
