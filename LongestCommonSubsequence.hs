@@ -14,17 +14,18 @@ initMatrix :: Int -> Int -> Data.Matrix.Matrix (Direction, Int)
 initMatrix a b = Data.Matrix.matrix a b (\(i, j) -> (NoDir, 0))
 
 updateMatrix :: Direction -> Int -> Int -> Data.Array.Array Int Char -> Data.Array.Array Int Char -> Data.Matrix.Matrix (Direction, Int) -> Data.Matrix.Matrix (Direction, Int)
-updateMatrix NoDir i j a b m = if (a ! (i - 1)) == (b ! (j - 1))
-                               then let diagM = lcsMatrix (i - 1) (j - 1) a b m
-                                        (diagDir, diagValue) = Data.Matrix.getElem i j diagM
-                                    in Data.Matrix.setElem (DiagonalDir, (1 + diagValue)) (i + 1, j + 1) diagM
-                               else let leftM = lcsMatrix (i - 1) j a b m
-                                        upM = lcsMatrix i (j - 1) a b leftM
-                                        (leftDir, leftValue) = Data.Matrix.getElem (i + 1) j upM
-                                        (upDir, upValue) = Data.Matrix.getElem i (j + 1) upM
-                                    in if leftValue < upValue
-                                       then Data.Matrix.setElem (UpDir, upValue) (i + 1, j + 1) upM
-                                       else Data.Matrix.setElem (LeftDir, leftValue) (i + 1, j + 1) upM
+updateMatrix NoDir i j a b m
+    | (a ! (i - 1)) == (b ! (j - 1))
+        = let diagM = lcsMatrix (i - 1) (j - 1) a b m
+              (diagDir, diagValue) = Data.Matrix.getElem i j diagM
+          in Data.Matrix.setElem (DiagonalDir, (1 + diagValue)) (i + 1, j + 1) diagM
+    | otherwise = let leftM = lcsMatrix (i - 1) j a b m
+                      upM = lcsMatrix i (j - 1) a b leftM
+                      (leftDir, leftValue) = Data.Matrix.getElem (i + 1) j upM
+                      (upDir, upValue) = Data.Matrix.getElem i (j + 1) upM
+                  in if leftValue < upValue
+                     then Data.Matrix.setElem (UpDir, upValue) (i + 1, j + 1) upM
+                     else Data.Matrix.setElem (LeftDir, leftValue) (i + 1, j + 1) upM
 updateMatrix _ _ _ _ _ m = m --Matrix already has a value here
 
 --Function to compute LCS matrix
